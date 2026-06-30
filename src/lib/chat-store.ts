@@ -32,6 +32,6 @@ export const useChat = create<ChatState>()(
         set((s) => ({ history: s.history.filter((r) => r.id !== id) })),
       clearHistory: () => set({ history: [] }),
     }),
-    { name: "threeminds-chat" },
+    { name: "Veriq AI-chat" },
   ),
 );

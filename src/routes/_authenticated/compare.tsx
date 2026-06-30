@@ -3,7 +3,7 @@ import { Topbar } from "@/components/layout/Topbar";
 import { ChatWorkspace } from "@/components/chat/ChatWorkspace";
 
 export const Route = createFileRoute("/_authenticated/compare")({
-  head: () => ({ meta: [{ title: "AI Compare — Three Minds AI" }] }),
+  head: () => ({ meta: [{ title: "AI Compare — Veriq AI" }] }),
   component: ComparePage,
 });
 

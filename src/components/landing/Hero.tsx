@@ -29,8 +29,8 @@ export function Hero() {
           transition={{ duration: 0.6, delay: 0.05 }}
           className="font-display mx-auto max-w-4xl text-5xl font-bold leading-[1.05] tracking-tight md:text-7xl"
         >
-          Three Minds. <br className="hidden md:block" />
-          <span className="gradient-text">One Prompt.</span>
+          Veriq. <br className="hidden md:block" />
+          <span className="gradient-text">Where Verification Meets Intelligence.</span>
         </motion.h1>
 
         <motion.p
@@ -54,11 +54,7 @@ export function Hero() {
               Get Started <ArrowRight className="ml-1" />
             </Link>
           </Button>
-          <Button variant="glass" size="xl" asChild>
-            <a href="#demo">
-              <PlayCircle className="mr-1" /> Watch Demo
-            </a>
-          </Button>
+          
         </motion.div>
 
         <motion.p

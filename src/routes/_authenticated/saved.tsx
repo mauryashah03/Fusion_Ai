@@ -5,7 +5,7 @@ import { MODELS } from "@/lib/ai-models";
 import { Bookmark, BookmarkCheck, Trash2 } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/saved")({
-  head: () => ({ meta: [{ title: "Saved Chats — Three Minds AI" }] }),
+  head: () => ({ meta: [{ title: "Saved Chats — Veriq AI" }] }),
   component: SavedPage,
 });
 

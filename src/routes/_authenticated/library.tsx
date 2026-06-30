@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { Search } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/library")({
-  head: () => ({ meta: [{ title: "Prompt Library — Three Minds AI" }] }),
+  head: () => ({ meta: [{ title: "Prompt Library — Veriq AI" }] }),
   component: LibraryPage,
 });
 

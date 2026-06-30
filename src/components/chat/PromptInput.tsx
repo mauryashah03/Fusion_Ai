@@ -24,30 +24,30 @@ export function PromptInput({ busy, onSubmit }: Props) {
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="glass-strong rounded-2xl p-3 shadow-[0_20px_60px_-30px_rgba(124,58,237,0.6)]"
+      className="rounded-xl border border-white/10 bg-transparent p-2 shadow-[0_20px_60px_-30px_rgba(124,58,237,0.6)]"
     >
       <textarea
         ref={taRef}
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        rows={3}
+        rows={2}
         onKeyDown={(e) => {
-          if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
+          if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault();
             handle("compare");
           }
         }}
         placeholder="Ask GPT, Claude, and Gemini..."
-        className="w-full resize-none bg-transparent px-3 py-2 text-sm outline-none placeholder:text-muted-foreground"
+        className="w-full resize-none bg-transparent px-2 py-1.5 text-sm outline-none placeholder:text-muted-foreground"
         disabled={busy}
       />
-      <div className="flex items-center justify-between gap-2 pt-2">
+      <div className="flex items-center justify-between gap-2 pt-1.5">
         <div className="flex items-center gap-1 text-muted-foreground">
           <Button variant="ghost" size="icon" disabled={busy} title="Attach (UI only)">
             <Paperclip className="h-4 w-4" />
           </Button>
           <span className="hidden text-xs sm:inline">
-            Drag & drop a file · ⌘↵ to compare
+            Press Enter to compare • Shift+Enter for new line
           </span>
         </div>
         <div className="flex items-center gap-2">
@@ -65,7 +65,7 @@ export function PromptInput({ busy, onSubmit }: Props) {
             disabled={busy || !value.trim()}
             onClick={() => handle("compare")}
           >
-            <Send className="h-4 w-4" /> Compare
+            <Send className="h-4 w-4" /> 
           </Button>
         </div>
       </div>

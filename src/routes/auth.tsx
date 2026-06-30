@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { createFileRoute, Link, useNavigate, redirect } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { Logo } from "@/components/Logo";
@@ -7,20 +7,20 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/lib/auth-store";
 import { firebaseEnabled } from "@/lib/firebase";
-import { Github, Mail } from "lucide-react";
+import { Github, Mail, Sun, Moon } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
-      { title: "Sign in — Three Minds AI" },
-      { name: "description", content: "Sign in to your Three Minds AI workspace." },
+      { title: "Sign in — Veriq AI" },
+      { name: "description", content: "Sign in to your Veriq AI workspace." },
     ],
   }),
   component: AuthPage,
   beforeLoad: () => {
     if (typeof window !== "undefined") {
-      const raw = localStorage.getItem("threeminds-auth");
+      const raw = localStorage.getItem("veriq-auth");
       if (raw) {
         try {
           const parsed = JSON.parse(raw);
@@ -39,6 +39,28 @@ function AuthPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  // ✅ Read saved theme from localStorage on first render
+  const [theme, setTheme] = useState<"dark" | "light">(() => {
+    const saved = localStorage.getItem("veriq-theme") as "dark" | "light" | null;
+    return saved ?? "light";
+  });
+
+  // ✅ Apply theme classes to <html> and <body> whenever theme changes
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", theme === "dark");
+    document.documentElement.classList.toggle("light", theme === "light");
+    document.body.classList.toggle("dark", theme === "dark");
+    document.body.classList.toggle("light", theme === "light");
+  }, [theme]);
+
+  // ✅ Single toggleTheme — inside component, dispatches event to sync Toaster
+  function toggleTheme() {
+    const next = theme === "dark" ? "light" : "dark";
+    localStorage.setItem("veriq-theme", next);
+    window.dispatchEvent(new CustomEvent("theme-change", { detail: next }));
+    setTheme(next);
+  }
 
   const signInEmail = useAuth((s) => s.signInEmail);
   const signUpEmail = useAuth((s) => s.signUpEmail);
@@ -85,12 +107,12 @@ function AuthPage() {
             <span className="gradient-text"> Run them all at once.</span>
           </h2>
           <p className="mt-4 max-w-md text-muted-foreground">
-            Three Minds AI sends every prompt to GPT, Claude, and Gemini in parallel — then
+            Veriq AI sends every prompt to GPT, Claude, and Gemini in parallel — then
             scores, ranks, and merges the answers so you don't have to.
           </p>
         </div>
         <div className="text-xs text-muted-foreground">
-          © {new Date().getFullYear()} Three Minds AI
+          © {new Date().getFullYear()} Veriq AI
         </div>
       </div>
 
@@ -101,14 +123,34 @@ function AuthPage() {
           animate={{ opacity: 1, y: 0 }}
           className="glass-strong w-full max-w-md rounded-3xl p-8 shadow-[0_30px_100px_-40px_rgba(124,58,237,0.7)]"
         >
-          <div className="mb-6 lg:hidden"><Logo /></div>
+          {/* Top row: Logo (mobile) + Theme toggle */}
+          <div className="mb-6 flex items-center justify-between lg:justify-end">
+            <div className="lg:hidden"><Logo /></div>
+            <button
+              onClick={toggleTheme}
+              title={theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode"}
+              className="grid h-8 w-8 place-items-center rounded-full transition-all"
+              style={{
+                border: "1px solid var(--border)",
+                background: "var(--muted)",
+                color: "var(--muted-foreground)",
+              }}
+            >
+              {theme === "dark" ? (
+                <Sun className="h-4 w-4" />
+              ) : (
+                <Moon className="h-4 w-4" />
+              )}
+            </button>
+          </div>
+
           <h1 className="font-display text-2xl font-bold">
             {mode === "signin" ? "Welcome back" : "Create your workspace"}
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
             {mode === "signin"
-              ? "Sign in to your Three Minds AI account."
-              : "Spin up a free Three Minds AI account in seconds."}
+              ? "Sign in to your Veriq AI account."
+              : "Spin up a free Veriq AI account in seconds."}
           </p>
 
           <div className="mt-6 grid gap-2">
@@ -121,41 +163,78 @@ function AuthPage() {
           </div>
 
           <div className="my-5 flex items-center gap-3 text-xs uppercase tracking-wider text-muted-foreground">
-            <div className="h-px flex-1 bg-white/10" /> or email <div className="h-px flex-1 bg-white/10" />
+            <div className="h-px flex-1 bg-white/10" /> or email{" "}
+            <div className="h-px flex-1 bg-white/10" />
           </div>
 
           <form onSubmit={submit} className="space-y-3">
             {mode === "signup" && (
               <div className="space-y-1">
                 <Label htmlFor="name">Name</Label>
-                <Input id="name" required value={name} onChange={(e) => setName(e.target.value)} placeholder="Ada Lovelace" />
+                <Input
+                  id="name"
+                  required
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Ada Lovelace"
+                />
               </div>
             )}
             <div className="space-y-1">
               <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@company.com" />
+              <Input
+                id="email"
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@company.com"
+              />
             </div>
             <div className="space-y-1">
               <Label htmlFor="password">Password</Label>
-              <Input id="password" type="password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="At least 6 characters" />
+              <Input
+                id="password"
+                type="password"
+                required
+                minLength={6}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="At least 6 characters"
+              />
             </div>
-            <Button type="submit" variant="hero" size="lg" className="w-full" disabled={loading}>
-              <Mail className="h-4 w-4" /> {mode === "signin" ? "Sign in" : "Create account"}
+            <Button
+              type="submit"
+              variant="hero"
+              size="lg"
+              className="w-full"
+              disabled={loading}
+            >
+              <Mail className="h-4 w-4" />
+              {mode === "signin" ? "Sign in" : "Create account"}
             </Button>
           </form>
 
           <div className="mt-4 flex items-center justify-between text-xs text-muted-foreground">
-            <button onClick={() => setMode(mode === "signin" ? "signup" : "signin")} className="hover:text-foreground">
-              {mode === "signin" ? "Need an account? Sign up" : "Already have one? Sign in"}
+            <button
+              onClick={() => setMode(mode === "signin" ? "signup" : "signin")}
+              className="hover:text-foreground"
+            >
+              {mode === "signin"
+                ? "Need an account? Sign up"
+                : "Already have one? Sign in"}
             </button>
-            <button onClick={demo} className="hover:text-foreground">Try demo →</button>
+            <button onClick={demo} className="hover:text-foreground">
+              Try demo →
+            </button>
           </div>
 
           {!firebaseEnabled && (
             <p className="mt-5 rounded-lg border border-white/5 bg-white/[0.02] p-3 text-[11px] leading-relaxed text-muted-foreground">
-              <span className="font-semibold text-foreground">Demo mode:</span> Firebase env vars aren't set,
-              so sign-in is local-only and stays on this device. Add{" "}
-              <code className="text-primary">VITE_FIREBASE_API_KEY</code> + friends to enable real auth.
+              <span className="font-semibold text-foreground">Demo mode:</span> Firebase env
+              vars aren't set, so sign-in is local-only and stays on this device. Add{" "}
+              <code className="text-primary">VITE_FIREBASE_API_KEY</code> + friends to enable
+              real auth.
             </p>
           )}
         </motion.div>

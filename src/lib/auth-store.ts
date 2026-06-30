@@ -149,7 +149,7 @@ export const useAuth = create<AuthState>()(
       },
     }),
     {
-      name: "threeminds-auth",
+      name: "Veriq AI-auth",
       onRehydrateStorage: () => (state) => {
         state?.setHydrated();
       },
@@ -162,7 +162,9 @@ if (typeof window !== "undefined" && firebaseEnabled) {
   const { auth } = getFirebase();
   if (auth) {
     onAuthStateChanged(auth, (u) => {
-      if (u) useAuth.setState({ user: fromFb(u, "email") });
-    });
-  }
-}
+      useAuth.setState({
+        user: u ? fromFb(u, "email") : null,
+      });
+    }); // ✅ closing paren for onAuthStateChanged
+  }   // ✅ closing brace for if (auth)
+}     // ✅ closing brace for if (typeof window !== "undefined" ...)

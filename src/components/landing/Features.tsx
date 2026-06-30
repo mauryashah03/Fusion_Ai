@@ -20,7 +20,7 @@ export function Features() {
             One workspace. <span className="gradient-text">Every frontier model.</span>
           </h2>
           <p className="mt-4 text-muted-foreground">
-            Stop tab-switching between AI tools. Three Minds AI runs them in parallel and
+            Stop tab-switching between AI tools. Veriq AI runs them in parallel and
             picks the winner — so you stop guessing which one to trust.
           </p>
         </div>

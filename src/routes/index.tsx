@@ -10,7 +10,7 @@ import { Footer } from "@/components/landing/Footer";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Three Minds AI — Ask Once. Get Three Minds." },
+      { title: "Veriq AI — Ask Once. Get Three Minds." },
       { name: "description", content: "Compare GPT, Claude, and Gemini instantly. Three frontier AI models, one premium workspace, the smartest combined answer." },
     ],
   }),

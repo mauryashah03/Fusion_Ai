@@ -7,7 +7,7 @@ import { MessageSquarePlus, GitCompare, Sparkles, TrendingUp, Trophy, Library } 
 import { MODELS } from "@/lib/ai-models";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
-  head: () => ({ meta: [{ title: "Dashboard — Three Minds AI" }] }),
+  head: () => ({ meta: [{ title: "Dashboard — Veriq AI" }] }),
   component: Dashboard,
 });
 

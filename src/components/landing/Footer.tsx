@@ -32,7 +32,7 @@ export function Footer() {
         </div>
       </div>
       <div className="mx-auto mt-10 max-w-7xl px-4 text-xs text-muted-foreground">
-        © {new Date().getFullYear()} Three Minds AI. All rights reserved.
+        © {new Date().getFullYear()} Veriq AI. All rights reserved.
       </div>
     </footer>
   );

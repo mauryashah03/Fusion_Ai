@@ -69,52 +69,58 @@ export function ChatWorkspace({ initialPrompt }: { initialPrompt?: string }) {
     : null;
 
   return (
-    <div className="space-y-5">
+    <div className="flex flex-col gap-5">
+
+      {/* Empty state or results in scrollable area */}
+      <div className="flex-1">
+        {prompt && (
+          <div className="glass flex items-start gap-3 rounded-xl px-4 py-3 mb-5">
+            <div className="grid h-7 w-7 shrink-0 place-items-center rounded-md bg-white/10 text-xs font-semibold">You</div>
+            <p className="text-sm leading-relaxed">{prompt}</p>
+          </div>
+        )}
+
+        {(busy || results.length > 0) && (
+          <div className="grid gap-4 lg:grid-cols-3 mb-5">
+            {ACTIVE_MODELS.map((m) => (
+              <ResponsePanel
+                key={m.id}
+                modelId={m.id}
+                streamingText={streams[m.id] ?? ""}
+                result={results.find((r) => r.modelId === m.id)}
+                isWinner={winnerId === m.id && results.length > 0}
+              />
+            ))}
+          </div>
+        )}
+
+        {results.length > 0 && (
+          <>
+            <EvaluationMetrics responses={results} />
+            <Scoreboard responses={results} />
+            {merged && <MergedAnswer text={merged} />}
+            {!merged && (
+              <div className="glass flex items-center justify-between rounded-2xl p-4 text-sm mt-5">
+                <span className="text-muted-foreground">Want a single, synthesized answer combining the best of all three?</span>
+                <button
+                  onClick={() => setMerged(buildMergedAnswer(prompt, results))}
+                  className="rounded-lg [background:var(--gradient-primary)] px-4 py-2 text-sm font-medium text-white shadow-md transition-transform hover:-translate-y-0.5"
+                >
+                  Generate Merged Answer
+                </button>
+              </div>
+            )}
+          </>
+        )}
+
+        {!prompt && !busy && !results.length && (
+          <EmptyState onPick={(p) => run(p, "compare")} />
+        )}
+      </div>
+
+      {/* Prompt bar always at bottom */}
       <PromptInput busy={busy} onSubmit={run} />
 
-      {prompt && (
-        <div className="glass flex items-start gap-3 rounded-xl px-4 py-3">
-          <div className="grid h-7 w-7 shrink-0 place-items-center rounded-md bg-white/10 text-xs font-semibold">You</div>
-          <p className="text-sm leading-relaxed">{prompt}</p>
-        </div>
-      )}
-
-      {(busy || results.length > 0) && (
-        <div className="grid gap-4 lg:grid-cols-3">
-          {ACTIVE_MODELS.map((m) => (
-            <ResponsePanel
-              key={m.id}
-              modelId={m.id}
-              streamingText={streams[m.id] ?? ""}
-              result={results.find((r) => r.modelId === m.id)}
-              isWinner={winnerId === m.id && results.length > 0}
-            />
-          ))}
-        </div>
-      )}
-
-      {results.length > 0 && (
-        <>
-          <EvaluationMetrics responses={results} />
-          <Scoreboard responses={results} />
-          {merged && <MergedAnswer text={merged} />}
-          {!merged && (
-            <div className="glass flex items-center justify-between rounded-2xl p-4 text-sm">
-              <span className="text-muted-foreground">Want a single, synthesized answer combining the best of all three?</span>
-              <button
-                onClick={() => setMerged(buildMergedAnswer(prompt, results))}
-                className="rounded-lg [background:var(--gradient-primary)] px-4 py-2 text-sm font-medium text-white shadow-md transition-transform hover:-translate-y-0.5"
-              >
-                Generate Merged Answer
-              </button>
-            </div>
-          )}
-        </>
-      )}
-
-      {!prompt && !busy && !results.length && (
-        <EmptyState onPick={(p) => run(p, "compare")} />
-      )}
     </div>
   );
 }
