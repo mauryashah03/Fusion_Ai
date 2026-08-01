@@ -15,14 +15,20 @@ function Dashboard() {
   const history = useChat((s) => s.history);
   const total = history.length;
   const merged = history.filter((h) => h.merged).length;
+
+  // Calculates average winner score safely across all past runs
   const avgScore =
     total === 0
       ? 0
       : Math.round(
-          history.reduce(
-            (acc, r) => acc + r.responses.reduce((a, b) => a + b.finalScore, 0) / Math.max(r.responses.length, 1),
-            0,
-          ) / total,
+          history.reduce((acc, r) => {
+            const resp = r.responses || [];
+            const avgForRun =
+              resp.length > 0
+                ? resp.reduce((a, b) => a + (b.finalScore || 0), 0) / resp.length
+                : 0;
+            return acc + avgForRun;
+          }, 0) / total,
         );
 
   return (
@@ -108,10 +114,16 @@ function Dashboard() {
 </p>
             </div>
             <div className="flex gap-2">
-              <Link to="/chat" className="inline-flex items-center gap-2 rounded-xl [background:var(--gradient-primary)] px-5 py-3 text-sm font-medium text-white shadow-lg transition-transform hover:-translate-y-0.5">
+              <Link
+                to="/chat"
+                className="inline-flex items-center gap-2 rounded-xl [background:var(--gradient-primary)] px-5 py-3 text-sm font-medium text-white shadow-lg transition-transform hover:-translate-y-0.5"
+              >
                 <MessageSquarePlus className="h-4 w-4" /> New Chat
               </Link>
-              <Link to="/library" className="glass inline-flex items-center gap-2 rounded-xl px-5 py-3 text-sm font-medium">
+              <Link
+                to="/library"
+                className="glass inline-flex items-center gap-2 rounded-xl px-5 py-3 text-sm font-medium"
+              >
                 <Library className="h-4 w-4" /> Browse Prompts
               </Link>
             </div>
@@ -131,14 +143,22 @@ function Dashboard() {
           <div className="glass rounded-2xl p-5 lg:col-span-2">
             <div className="mb-3 flex items-center justify-between">
               <h3 className="font-semibold">Recent comparisons</h3>
-              <Link to="/history" className="text-xs text-muted-foreground hover:text-foreground">View all →</Link>
+              <Link to="/history" className="text-xs text-muted-foreground hover:text-foreground">
+                View all →
+              </Link>
             </div>
             {history.length === 0 ? (
-              <p className="text-sm text-muted-foreground">No comparisons yet. <Link to="/chat" className="text-primary">Start your first one →</Link></p>
+              <p className="text-sm text-muted-foreground">
+                No comparisons yet.{" "}
+                <Link to="/chat" className="text-primary">
+                  Start your first one →
+                </Link>
+              </p>
             ) : (
               <div className="space-y-2">
                 {history.slice(0, 6).map((h) => {
-                  const winner = [...h.responses].sort((a, b) => b.finalScore - a.finalScore)[0];
+                  const responses = h.responses || [];
+                  const winner = [...responses].sort((a, b) => (b.finalScore || 0) - (a.finalScore || 0))[0];
                   const wm = MODELS.find((m) => m.id === winner?.modelId);
                   return (
                     <Link
@@ -148,8 +168,12 @@ function Dashboard() {
                     >
                       <span className="min-w-0 flex-1 truncate pr-3">{h.prompt}</span>
                       <span className="ml-auto flex items-center gap-2 text-xs text-muted-foreground">
-                        <span className="inline-block h-2 w-2 rounded-full" style={{ background: wm?.color }} />
-                        {wm?.name} · <span className="gradient-text font-mono">{winner?.finalScore}</span>
+                        <span
+                          className="inline-block h-2 w-2 rounded-full"
+                          style={{ background: wm?.color || "#10b981" }}
+                        />
+                        {wm?.name || "Model"} ·{" "}
+                        <span className="gradient-text font-mono">{winner?.finalScore || 0}</span>
                       </span>
                     </Link>
                   );
@@ -158,16 +182,25 @@ function Dashboard() {
             )}
           </div>
 
+          {/* Model Status Overview */}
           <div className="glass rounded-2xl p-5">
             <h3 className="mb-3 font-semibold">Models</h3>
             <div className="space-y-2">
               {MODELS.map((m) => (
-                <div key={m.id} className="flex items-center justify-between rounded-lg border border-white/5 bg-white/[0.02] px-3 py-2 text-sm">
+                <div
+                  key={m.id}
+                  className="flex items-center justify-between rounded-lg border border-white/5 bg-white/[0.02] px-3 py-2 text-sm"
+                >
                   <div className="flex items-center gap-2">
                     <span className="inline-block h-2 w-2 rounded-full" style={{ background: m.color }} />
                     <span>{m.name}</span>
                   </div>
-                  <span className={"text-[10px] uppercase tracking-wider " + (m.enabled ? "text-emerald-400" : "text-muted-foreground")}>
+                  <span
+                    className={
+                      "text-[10px] uppercase tracking-wider " +
+                      (m.enabled ? "text-emerald-400" : "text-muted-foreground")
+                    }
+                  >
                     {m.enabled ? "active" : "soon"}
                   </span>
                 </div>
@@ -180,7 +213,17 @@ function Dashboard() {
   );
 }
 
-function StatCard({ label, value, icon: Icon, accent }: { label: string; value: number | string; icon: React.ComponentType<{ className?: string }>; accent?: boolean }) {
+function StatCard({
+  label,
+  value,
+  icon: Icon,
+  accent,
+}: {
+  label: string;
+  value: number | string;
+  icon: React.ComponentType<{ className?: string }>;
+  accent?: boolean;
+}) {
   return (
     <div className="glass rounded-2xl p-5">
       <div className="flex items-center justify-between">

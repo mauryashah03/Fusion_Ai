@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ACTIVE_MODELS, buildMergedAnswer, streamMockResponse, type ModelId, type ModelResponse } from "@/lib/ai-models";
+import { ACTIVE_MODELS, buildMergedAnswer, fetchLiveResponses, streamMockResponse, type ModelId, type ModelResponse } from "@/lib/ai-models";
 import { useChat } from "@/lib/chat-store";
 import { PromptInput } from "./PromptInput";
 import { ResponsePanel } from "./ResponsePanel";
@@ -24,18 +24,13 @@ export function ChatWorkspace({ initialPrompt }: { initialPrompt?: string }) {
     setBusy(true);
 
     try {
-      const all = await Promise.all(
-        ACTIVE_MODELS.map((m) =>
-          streamMockResponse(m.id, p, (partial) => {
-            setStreams((s) => ({ ...s, [m.id]: partial }));
-          }),
-        ),
-      );
-      setResults(all);
+      const { responses, merged: backendMerged } = await fetchLiveResponses(p, (modelId, partial) => {
+        setStreams((s) => ({ ...s, [modelId]: partial }));
+      });
 
-      let mergedText = "";
-      if (mode === "merge") {
-        mergedText = buildMergedAnswer(p, all);
+      setResults(responses);
+      const mergedText = mode === "merge" ? (backendMerged || buildMergedAnswer(p, responses)) : backendMerged || "";
+      if (mergedText) {
         setMerged(mergedText);
       }
 
@@ -43,11 +38,33 @@ export function ChatWorkspace({ initialPrompt }: { initialPrompt?: string }) {
         id: "c-" + Date.now(),
         prompt: p,
         createdAt: Date.now(),
-        responses: all,
+        responses,
         merged: mergedText || undefined,
       });
-    } catch {
-      toast.error("Something went wrong. Try again.");
+    } catch (error) {
+      console.error(error);
+      try {
+        const fallback = await Promise.all(
+          ACTIVE_MODELS.map((m) =>
+            streamMockResponse(m.id, p, (partial) => {
+              setStreams((s) => ({ ...s, [m.id]: partial }));
+            }),
+          ),
+        );
+        setResults(fallback);
+        if (mode === "merge") {
+          setMerged(buildMergedAnswer(p, fallback));
+        }
+        addRecord({
+          id: "c-" + Date.now(),
+          prompt: p,
+          createdAt: Date.now(),
+          responses: fallback,
+          merged: mode === "merge" ? buildMergedAnswer(p, fallback) : undefined,
+        });
+      } catch {
+        toast.error("The backend is unavailable right now. Please try again shortly.");
+      }
     } finally {
       setBusy(false);
     }

@@ -11,14 +11,14 @@ export const dailyUsage = [
 
 export const modelUsage = [
   { name: "GPT-4o", value: 38 },
-  { name: "Claude", value: 34 },
+  { name: "Llama 3", value: 34 },
   { name: "Gemini", value: 28 },
 ];
 
 export const qualityTrends = Array.from({ length: 14 }, (_, i) => ({
   day: `D${i + 1}`,
   gpt: 86 + Math.round(Math.sin(i / 2) * 5 + Math.random() * 3),
-  claude: 88 + Math.round(Math.cos(i / 2) * 4 + Math.random() * 3),
+  llama: 88 + Math.round(Math.cos(i / 2) * 4 + Math.random() * 3),
   gemini: 84 + Math.round(Math.sin(i / 3) * 6 + Math.random() * 3),
 }));
 

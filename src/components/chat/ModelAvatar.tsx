@@ -1,11 +1,11 @@
 import { type ModelId } from "@/lib/ai-models";
 
 const LABELS: Record<ModelId, string> = {
-  gpt: "G", claude: "C", gemini: "✦",
+  gpt: "G", gemini: "✦",
   deepseek: "D", grok: "X", mistral: "M", llama: "L", perplexity: "P",
 };
 const COLORS: Record<ModelId, string> = {
-  gpt: "var(--gpt)", claude: "var(--claude)", gemini: "var(--gemini)",
+  gpt: "var(--gpt)", gemini: "var(--gemini)",
   deepseek: "var(--cyan)", grok: "var(--violet)", mistral: "var(--indigo)",
   llama: "var(--accent)", perplexity: "var(--gemini)",
 };

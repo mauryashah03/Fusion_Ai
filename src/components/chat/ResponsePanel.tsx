@@ -1,4 +1,8 @@
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
+import "katex/dist/katex.min.css";
 import { motion } from "framer-motion";
 import { ModelAvatar } from "./ModelAvatar";
 import { MODELS, type ModelId, type ModelResponse } from "@/lib/ai-models";
@@ -60,12 +64,56 @@ export function ResponsePanel({ modelId, streamingText, result, isWinner }: Prop
       {/* Response text — capped height with scroll so score never overlaps */}
       <div className="prose prose-invert prose-sm flex-1 min-h-[180px] max-h-[260px] max-w-none overflow-y-auto pr-1 text-sm leading-relaxed pb-2">
         {text ? (
-          <ReactMarkdown>{text}</ReactMarkdown>
+          <div className="
+            prose prose-sm prose-invert max-w-none
+            text-sm leading-relaxed
+
+            [&_h1]:text-base [&_h1]:font-bold [&_h1]:mb-2 [&_h1]:mt-3
+            [&_h2]:text-sm [&_h2]:font-bold [&_h2]:mb-2 [&_h2]:mt-3 [&_h2]:text-white/90
+            [&_h3]:text-sm [&_h3]:font-semibold [&_h3]:mb-1 [&_h3]:mt-2 [&_h3]:text-white/80
+
+            [&_p]:mb-2 [&_p]:text-white/80 [&_p]:leading-relaxed
+
+            [&_strong]:text-white [&_strong]:font-semibold
+            [&_em]:text-white/70 [&_em]:italic
+
+            [&_ul]:mb-2 [&_ul]:ml-4 [&_ul]:list-disc [&_ul]:text-white/75
+            [&_ol]:mb-2 [&_ol]:ml-4 [&_ol]:list-decimal [&_ol]:text-white/75
+            [&_li]:mb-0.5 [&_li]:leading-snug
+
+            [&_table]:w-full [&_table]:text-xs [&_table]:border-collapse [&_table]:mb-3
+            [&_thead]:bg-white/10
+            [&_th]:px-2 [&_th]:py-1.5 [&_th]:text-left [&_th]:font-semibold [&_th]:text-white/90 [&_th]:border [&_th]:border-white/10
+            [&_td]:px-2 [&_td]:py-1.5 [&_td]:text-white/70 [&_td]:border [&_td]:border-white/10
+            [&_tr:nth-child(even)]:bg-white/[0.03]
+
+            [&_code]:bg-white/10 [&_code]:rounded [&_code]:px-1 [&_code]:py-0.5 [&_code]:text-[11px] [&_code]:text-emerald-300 [&_code]:font-mono
+            [&_pre]:bg-black/40 [&_pre]:rounded-lg [&_pre]:p-3 [&_pre]:overflow-x-auto [&_pre]:mb-3 [&_pre]:border [&_pre]:border-white/10
+            [&_pre_code]:bg-transparent [&_pre_code]:p-0 [&_pre_code]:text-xs [&_pre_code]:text-emerald-300
+
+            [&_blockquote]:border-l-2 [&_blockquote]:border-white/20 [&_blockquote]:pl-3 [&_blockquote]:text-white/60 [&_blockquote]:italic [&_blockquote]:mb-2
+
+            [&_hr]:border-white/10 [&_hr]:my-3
+
+            [&_a]:text-violet-400 [&_a]:underline [&_a]:underline-offset-2
+
+            [&_.katex]:text-white/90
+            [&_.katex-display]:my-2 [&_.katex-display]:overflow-x-auto
+          ">
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm, remarkMath]}
+              rehypePlugins={[rehypeKatex]}
+            >
+              {text}
+            </ReactMarkdown>
+          </div>
         ) : (
-          <div className="space-y-2">
-            <div className="h-3 w-5/6 rounded shimmer bg-white/5" />
-            <div className="h-3 w-4/6 rounded shimmer bg-white/5" />
-            <div className="h-3 w-3/6 rounded shimmer bg-white/5" />
+          <div className="space-y-2 pt-1">
+            <div className="h-3 w-5/6 rounded animate-pulse bg-white/5" />
+            <div className="h-3 w-4/6 rounded animate-pulse bg-white/5" />
+            <div className="h-3 w-3/6 rounded animate-pulse bg-white/5" />
+            <div className="h-3 w-4/5 rounded animate-pulse bg-white/5" />
+            <div className="h-3 w-2/3 rounded animate-pulse bg-white/5" />
           </div>
         )}
         {!done && text && (
