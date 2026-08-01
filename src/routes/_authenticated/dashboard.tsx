@@ -35,14 +35,77 @@ function Dashboard() {
           animate={{ opacity: 1, y: 0 }}
           className="gradient-border relative overflow-hidden rounded-3xl p-8"
         >
-          <div className="pointer-events-none absolute -right-20 -top-20 h-60 w-60 rounded-full bg-primary/30 blur-3xl" />
+         <div className="absolute -top-40 -right-32 h-[420px] w-[420px] rounded-full bg-emerald-400/25 blur-[140px] animate-pulse" />
           <div className="relative flex flex-col items-start gap-4 md:flex-row md:items-center md:justify-between">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-primary">Ready when you are</p>
-              <h2 className="font-display mt-1 text-3xl font-bold">Start a new comparison</h2>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Ask once. Watch GPT, Claude, and Gemini answer in parallel.
-              </p>
+             <p className="text-xs font-semibold uppercase tracking-wider text-primary">
+  Ready when you are
+</p>
+
+<motion.div
+  whileHover={{
+    scale: 1.02,
+  }}
+  transition={{
+    duration: 0.25,
+  }}
+>
+  <motion.h2
+    className="font-display mt-1 text-3xl font-bold flex flex-wrap overflow-hidden drop-shadow-[0_0_18px_rgba(16,185,129,0.35)]"
+    initial="hidden"
+    animate="visible"
+    variants={{
+      visible: {
+        transition: {
+          staggerChildren: 0.15,
+        },
+      },
+    }}
+  >
+    {"Start a new comparison".split(" ").map((word, index) => (
+      <motion.span
+        key={index}
+        variants={{
+          hidden: {
+            opacity: 0,
+            x: -80,
+            filter: "blur(12px)",
+          },
+          visible: {
+            opacity: 1,
+            x: 0,
+            filter: "blur(0px)",
+          },
+        }}
+        transition={{
+          duration: 0.7,
+          ease: "easeOut",
+        }}
+        className="mr-3 relative overflow-hidden"
+      >
+        {word}
+
+        <motion.span
+          className="absolute inset-0 bg-gradient-to-r from-transparent via-emerald-300/60 to-transparent"
+          initial={{
+            x: "-120%",
+          }}
+          animate={{
+            x: "120%",
+          }}
+          transition={{
+            delay: index * 0.18 + 0.4,
+            duration: 0.8,
+          }}
+        />
+      </motion.span>
+    ))}
+  </motion.h2>
+</motion.div>
+
+<p className="mt-1 text-sm text-muted-foreground">
+  Ask once. Watch GPT, Claude, and Gemini answer in parallel.
+</p>
             </div>
             <div className="flex gap-2">
               <Link to="/chat" className="inline-flex items-center gap-2 rounded-xl [background:var(--gradient-primary)] px-5 py-3 text-sm font-medium text-white shadow-lg transition-transform hover:-translate-y-0.5">

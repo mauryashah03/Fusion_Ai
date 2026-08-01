@@ -1,8 +1,10 @@
+import { useEffect, useMemo, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Topbar } from "@/components/layout/Topbar";
 import { useChat } from "@/lib/chat-store";
 import { MODELS } from "@/lib/ai-models";
 import { Bookmark, BookmarkCheck, Trash2 } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/saved")({
   head: () => ({ meta: [{ title: "Saved Chats — Veriq AI" }] }),
@@ -10,9 +12,25 @@ export const Route = createFileRoute("/_authenticated/saved")({
 });
 
 function SavedPage() {
-  const history = useChat((s) => s.history.filter((h) => h.saved));
+  const historyAll = useChat((s) => s.history);
+  const history = useMemo(() => historyAll.filter((h) => h.saved), [historyAll]);
   const toggle = useChat((s) => s.toggleSaved);
   const remove = useChat((s) => s.removeRecord);
+  const [highlighted, setHighlighted] = useState<string | null>(null);
+
+  // When arriving from a sidebar link like /saved#<id>, scroll to and
+  // briefly highlight that chat.
+  useEffect(() => {
+    const id = window.location.hash?.slice(1);
+    if (!id) return;
+    const el = document.getElementById(`saved-${id}`);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "center" });
+      setHighlighted(id);
+      const t = setTimeout(() => setHighlighted(null), 2000);
+      return () => clearTimeout(t);
+    }
+  }, [history.length]);
 
   return (
     <>
@@ -25,7 +43,14 @@ function SavedPage() {
           </div>
         ) : (
           history.map((h) => (
-            <div key={h.id} className="glass flex items-start justify-between gap-3 rounded-2xl p-4">
+            <div
+              key={h.id}
+              id={`saved-${h.id}`}
+              className={cn(
+                "glass flex items-start justify-between gap-3 rounded-2xl p-4 transition-shadow",
+                highlighted === h.id && "ring-2 ring-primary/60",
+              )}
+            >
               <div className="min-w-0 flex-1">
                 <div className="text-xs text-muted-foreground">{new Date(h.createdAt).toLocaleString()}</div>
                 <div className="mt-1 font-medium">{h.prompt}</div>

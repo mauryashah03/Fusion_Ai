@@ -56,77 +56,216 @@
   --font-display: "Poppins", "Inter", ui-sans-serif, system-ui, sans-serif;
 }
 
-/* ====================================================
-   DEFAULT — Dark (charcoal) on first load
-   theme-store.ts overrides these via setProperty()
-==================================================== */
-
 :root {
   --radius: 0.75rem;
 
-  --background: #111111;
-  --foreground: #f5f5f0;
+  /* ===========================
+     VERIQ AI THEME (LIGHT)
+     Kept as a light complement using
+     the same brand hues as the dark
+     hero design (olive -> teal).
+  ============================ */
 
-  --card: #1a1a1a;
-  --card-foreground: #f5f5f0;
+  --background: #F7F8F4;
+  --foreground: #0B141F;
 
-  --popover: #1a1a1a;
-  --popover-foreground: #f5f5f0;
+  --card: #FFFFFF;
+  --card-foreground: #0B141F;
 
-  --primary: #f5f5f0;
-  --primary-foreground: #111111;
+  --popover: #FFFFFF;
+  --popover-foreground: #0B141F;
 
-  --secondary: #242424;
-  --secondary-foreground: #f5f5f0;
+  --primary: #1F8A63;
+  --primary-foreground: #FFFFFF;
 
-  --muted: #1e1e1e;
-  --muted-foreground: #888880;
+  --secondary: #EAF4EF;
+  --secondary-foreground: #0B141F;
 
-  --accent: #f5f5f0;
-  --accent-foreground: #111111;
+  --muted: #EEF5F1;
+  --muted-foreground: #6F8278;
 
-  --destructive: oklch(0.65 0.24 27);
-  --destructive-foreground: oklch(0.99 0 0);
+  --accent: #22C3A0;
+  --accent-foreground: #FFFFFF;
 
-  --border: rgba(245, 245, 240, 0.10);
-  --input: rgba(245, 245, 240, 0.07);
-  --ring: #f5f5f0;
+  --destructive: #DC2626;
+  --destructive-foreground: #FFFFFF;
 
-  --chart-1: #f5f5f0;
-  --chart-2: #c8c8c0;
-  --chart-3: #909088;
-  --chart-4: #606058;
-  --chart-5: #404038;
+  --border: rgba(11,20,31,.12);
+  --input: rgba(11,20,31,.06);
+  --ring: #1F8A63;
 
-  --sidebar: #0d0d0d;
-  --sidebar-foreground: #f5f5f0;
-  --sidebar-primary: #f5f5f0;
-  --sidebar-primary-foreground: #111111;
-  --sidebar-accent: #1a1a1a;
-  --sidebar-accent-foreground: #888880;
-  --sidebar-border: rgba(245, 245, 240, 0.08);
-  --sidebar-ring: #f5f5f0;
+  /* Charts */
 
-  --violet: #f5f5f0;
-  --indigo: #c8c8c0;
-  --cyan: #909088;
+  --chart-1: #1F8A63;
+  --chart-2: #2DBE8C;
+  --chart-3: #52D4A4;
+  --chart-4: #87E2C4;
+  --chart-5: #B8F2DE;
 
-  --gpt: #6aab60;
-  --claude: #c87840;
-  --gemini: #6080b0;
+  /* Sidebar */
 
-  --gradient-primary: linear-gradient(135deg, #f5f5f0 0%, #d0d0c8 50%, #e8e8e0 100%);
-  --gradient-soft: linear-gradient(135deg, rgba(245,245,240,0.08) 0%, rgba(208,208,200,0.05) 50%, rgba(232,232,224,0.05) 100%);
-  --gradient-radial: radial-gradient(ellipse at top, rgba(245,245,240,0.07), transparent 60%);
+  --sidebar: #FFFFFF;
+  --sidebar-foreground: #0B141F;
+  --sidebar-primary: #1F8A63;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #EAF4EF;
+  --sidebar-accent-foreground: #0B141F;
+  --sidebar-border: rgba(11,20,31,.08);
+  --sidebar-ring: #1F8A63;
 
-  --glass-bg: rgba(26, 26, 26, 0.88);
-  --glass-border: rgba(245, 245, 240, 0.10);
+  /* Brand */
+
+  --violet: #22C3A0;
+  --indigo: #1F8A63;
+  --cyan: #52D4A4;
+
+  --gpt: #10A37F;
+  --claude: #C87A32;
+  --gemini: #4AA3FF;
+
+  /* Gradients */
+
+  --gradient-primary:
+linear-gradient(
+90deg,
+#8FB84C 0%,
+#5FAE55 22%,
+#2DBE8C 48%,
+#1D8F8A 72%,
+#14313A 100%
+);
+
+  --gradient-soft:
+      linear-gradient(
+      135deg,
+      rgba(31,138,99,.10) 0%,
+      rgba(34,195,160,.08) 50%,
+      rgba(82,212,164,.06) 100%
+      );
+
+  --gradient-radial:
+      radial-gradient(
+      ellipse at top,
+      rgba(31,138,99,.12),
+      transparent 70%
+      );
+
+  /* Glass */
+
+  --glass-bg: rgba(255,255,255,.72);
+  --glass-border: rgba(31,138,99,.10);
   --glass-blur: 18px;
 
-  --shadow-glow: 0 0 60px -10px rgba(245, 245, 240, 0.12);
-  --shadow-card: 0 10px 40px -20px rgba(0, 0, 0, 0.60);
-}
+  /* Shadows */
 
+  --shadow-glow:
+      0 0 70px -12px rgba(34,195,160,.30);
+
+  --shadow-card:
+      0 12px 40px -18px rgba(31,138,99,.12);
+}
+.dark {
+
+  /* ===========================
+     VERIQ AI THEME (DARK)
+     Colors sampled directly from the
+     provided hero screenshot.
+  ============================ */
+
+  --background: #0B141F;
+  --foreground: #F4F7FA;
+
+  --card: #101B28;
+  --card-foreground: #F4F7FA;
+
+  --popover: #101B28;
+  --popover-foreground: #F4F7FA;
+
+  --primary: #2DBE8C;
+  --primary-foreground: #061310;
+
+  --secondary: #16212E;
+  --secondary-foreground: #F4F7FA;
+
+  --muted: #16212E;
+  --muted-foreground: #97A6B0;
+
+  --accent: #22C3A0;
+  --accent-foreground: #06140F;
+
+  --destructive: #DC2626;
+  --destructive-foreground: #FFFFFF;
+
+  --border: rgba(148,163,184,.14);
+  --input: rgba(148,163,184,.08);
+  --ring: #2DBE8C;
+/* Charts */
+
+--chart-1:#2DBE8C;
+--chart-2:#22C3A0;
+--chart-3:#52D4A4;
+--chart-4:#87E2C4;
+--chart-5:#B8F2DE;
+
+/* Sidebar */
+
+--sidebar:#101B28;
+--sidebar-foreground:#F4F7FA;
+--sidebar-primary:#2DBE8C;
+--sidebar-primary-foreground:#061310;
+--sidebar-accent:#16212E;
+--sidebar-accent-foreground:#F4F7FA;
+--sidebar-border:rgba(148,163,184,.10);
+--sidebar-ring:#2DBE8C;
+
+/* Brand */
+
+--violet:#22C3A0;
+--indigo:#2DBE8C;
+--cyan:#52D4A4;
+
+/* Gradients */
+
+--gradient-primary:
+linear-gradient(
+90deg,
+#8FB84C 0%,
+#5FAE55 22%,
+#2DBE8C 48%,
+#1D8F8A 72%,
+#14313A 100%
+);
+
+--gradient-soft:
+linear-gradient(
+135deg,
+rgba(45,190,140,.18),
+rgba(34,195,160,.10),
+rgba(82,212,164,.05)
+);
+
+--gradient-radial:
+radial-gradient(
+ellipse at top,
+rgba(34,195,160,.18),
+transparent 70%
+);
+
+/* Glass */
+
+--glass-bg: rgba(16,27,40,.65);
+--glass-border: rgba(148,163,184,.10);
+--glass-blur: 20px;
+
+/* Shadows */
+
+--shadow-glow:
+0 0 90px -15px rgba(34,195,160,.35);
+
+--shadow-card:
+0 15px 45px -18px rgba(0,0,0,.55);
+
+}
 /* ====================================================
    BASE
    Body bg uses var(--background) — theme-store.ts
@@ -149,18 +288,11 @@
   }
 
   /* Body gradient — theme-store.ts sets backgroundImage directly on body */
-  body {
-    background-attachment: fixed;
-  }
-
-  h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-display);
-    letter-spacing: -0.02em;
-  }
-
-  ::selection {
-    background: rgba(245, 245, 240, 0.20);
-  }
+ 
+::selection {
+  background: rgba(34,195,160,.25);
+  color: white;
+}
 
   /* Scrollbar — uses CSS vars so it adapts automatically */
   ::-webkit-scrollbar { width: 10px; height: 10px; }
@@ -173,7 +305,32 @@
     background: var(--muted-foreground);
   }
 }
+body{
+  background: var(--background);
 
+  background-image:
+    radial-gradient(circle at 90% 8%,
+      rgba(34,195,160,.14),
+      transparent 28%),
+
+    radial-gradient(circle at 15% 10%,
+      rgba(143,184,76,.10),
+      transparent 32%),
+
+    radial-gradient(circle at 50% 90%,
+      rgba(29,143,138,.06),
+      transparent 38%),
+
+    linear-gradient(
+      180deg,
+      var(--background) 0%,
+      color-mix(in srgb,var(--background) 96%, black) 100%
+    );
+
+  background-repeat:no-repeat;
+  background-size:cover;
+  background-attachment:fixed;
+}
 /* ====================================================
    UTILITIES
 ==================================================== */
@@ -239,8 +396,16 @@
 }
 
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: var(--shadow-glow); }
-  50% { box-shadow: 0 0 80px -5px rgba(245, 245, 240, 0.30); }
+
+0%,100%{
+box-shadow:var(--shadow-glow);
+}
+
+50%{
+box-shadow:
+0 0 90px -10px rgba(34,195,160,.45);
+}
+
 }
 
 @utility animate-pulse-glow {

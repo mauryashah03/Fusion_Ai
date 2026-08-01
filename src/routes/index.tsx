@@ -7,25 +7,39 @@ import { Pricing } from "@/components/landing/Pricing";
 import { ModelsStrip } from "@/components/landing/ModelsStrip";
 import { Footer } from "@/components/landing/Footer";
 
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Veriq AI — Ask Once. Get Three Minds." },
-      { name: "description", content: "Compare GPT, Claude, and Gemini instantly. Three frontier AI models, one premium workspace, the smartest combined answer." },
+      {
+        title: "Veriq AI — Ask Once. Get Three Minds.",
+      },
+      {
+        name: "description",
+        content:
+          "Compare GPT, Claude, and Gemini instantly. Three frontier AI models, one premium workspace, the smartest combined answer.",
+      },
     ],
   }),
   component: LandingPage,
 });
 
+
 function LandingPage() {
   return (
-    <main className="relative min-h-screen overflow-x-hidden">
+    <main className="relative min-h-screen overflow-hidden">
       <LandingNav />
+
       <Hero />
+
       <ModelsStrip />
+
       <Features />
+
       <HowItWorks />
+
       <Pricing />
+
       <Footer />
     </main>
   );

@@ -1,3 +1,5 @@
+//import AnimatedBackground from "@/components/AnimatedBackground";
+//import AnimatedBackground from "@/components/ui/AnimatedBackground";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
@@ -99,10 +101,20 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+
   return (
     <QueryClientProvider client={queryClient}>
-      <Outlet />
-      <Toaster richColors theme="dark" position="top-right" />
+      
+
+      <div className="relative z-10 min-h-screen">
+        <Outlet />
+      </div>
+
+      <Toaster
+        richColors
+        theme="dark"
+        position="top-right"
+      />
     </QueryClientProvider>
   );
 }

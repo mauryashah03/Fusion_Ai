@@ -7,6 +7,17 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Trash2 } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export const Route = createFileRoute("/_authenticated/settings")({
   head: () => ({ meta: [{ title: "Settings — Veriq AI" }] }),
@@ -52,9 +63,30 @@ function SettingsPage() {
 
         <Section title="Danger Zone" desc="Your data, your rights.">
           <div className="flex flex-wrap gap-2">
-            <Button variant="destructive" size="sm" onClick={() => { clearHistory(); toast.success("History cleared"); }}>
-              <Trash2 className="h-4 w-4" /> Clear history
-            </Button>
+            <AlertDialog>
+  <AlertDialogTrigger asChild>
+    <Button variant="destructive" size="sm">
+      <Trash2 className="h-4 w-4" /> Clear history
+    </Button>
+  </AlertDialogTrigger>
+  <AlertDialogContent className="glass-strong border-border">
+    <AlertDialogHeader>
+      <AlertDialogTitle>Are you sure you want to delete history?</AlertDialogTitle>
+      <AlertDialogDescription>
+        This will permanently delete your chat history. This action cannot be undone.
+      </AlertDialogDescription>
+    </AlertDialogHeader>
+    <AlertDialogFooter>
+      <AlertDialogCancel>No</AlertDialogCancel>
+      <AlertDialogAction
+        className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+        onClick={() => { clearHistory(); toast.success("History cleared"); }}
+      >
+        Yes
+      </AlertDialogAction>
+    </AlertDialogFooter>
+  </AlertDialogContent>
+</AlertDialog>
           </div>
         </Section>
 
