@@ -71,9 +71,9 @@ function AnalyticsPage() {
                 labelStyle={{ color: "var(--foreground)" }}
               />
               <Legend />
-              <Line type="monotone" dataKey="gpt" stroke="#22C55E" strokeWidth={2} dot={false} name="GPT" />
-              <Line type="monotone" dataKey="claude" stroke="#F59E0B" strokeWidth={2} dot={false} name="Claude" />
-              <Line type="monotone" dataKey="gemini" stroke="#4F46E5" strokeWidth={2} dot={false} name="Gemini" />
+              <Line type="monotone" dataKey="Gpt" stroke="#22C55E" strokeWidth={2} dot={false} name="Gpt" />
+              <Line type="monotone" dataKey="Gemini" stroke="#F59E0B" strokeWidth={2} dot={false} name="Gemini" />
+              <Line type="monotone" dataKey="Llama3" stroke="#4F46E5" strokeWidth={2} dot={false} name="Llama3" />
             </LineChart>
           </ResponsiveContainer>
         </Card>

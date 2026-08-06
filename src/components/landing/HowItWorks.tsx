@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 
 const steps = [
   { n: "01", title: "Enter Prompt", desc: "Type a question, paste research, or upload a file." },
-  { n: "02", title: "AI Models Respond", desc: "GPT, Claude, and Gemini stream answers in parallel." },
+  { n: "02", title: "AI Models Respond", desc: "Gpt, Gemini, and Llama3 stream answers in parallel." },
   { n: "03", title: "Responses Analyzed", desc: "We score every answer across six quality dimensions." },
   { n: "04", title: "Best Answer Generated", desc: "A merged intelligence answer combines the strongest insights." },
 ];

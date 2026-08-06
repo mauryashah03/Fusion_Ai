@@ -17,7 +17,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Compare GPT, Claude, and Gemini instantly. Three frontier AI models, one premium workspace, the smartest combined answer.",
+          "Compare Gpt, Gemini, and Llama3 instantly. Three frontier AI models, one premium workspace, the smartest combined answer.",
       },
     ],
   }),

@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
-import { ACTIVE_MODELS, buildMergedAnswer, streamMockResponse, type ModelId, type ModelResponse } from "@/lib/ai-models";
+import { useEffect, useRef, useState } from "react";
+import { ACTIVE_MODELS, buildMergedAnswer, streamMockResponse, StreamController, type ModelId, type ModelResponse } from "@/lib/ai-models";
 import { useChat } from "@/lib/chat-store";
+import { useShareChat } from "@/lib/share-store";
 import { PromptInput } from "./PromptInput";
 import { ResponsePanel } from "./ResponsePanel";
 import { EvaluationMetrics } from "./EvaluationMetrics";
@@ -14,7 +15,10 @@ export function ChatWorkspace({ initialPrompt }: { initialPrompt?: string }) {
   const [results, setResults] = useState<ModelResponse[]>([]);
   const [merged, setMerged] = useState<string>("");
   const [busy, setBusy] = useState(false);
+  const [paused, setPaused] = useState(false);
   const addRecord = useChat((s) => s.addRecord);
+  const setShareData = useShareChat((s) => s.setShareData);
+  const controllerRef = useRef<StreamController | null>(null);
 
   async function run(p: string, mode: "compare" | "merge") {
     setPrompt(p);
@@ -22,13 +26,23 @@ export function ChatWorkspace({ initialPrompt }: { initialPrompt?: string }) {
     setResults([]);
     setMerged("");
     setBusy(true);
+    setPaused(false);
+    setShareData({ prompt: "", responses: [], merged: undefined });
+
+    const controller = new StreamController();
+    controllerRef.current = controller;
 
     try {
       const all = await Promise.all(
         ACTIVE_MODELS.map((m) =>
-          streamMockResponse(m.id, p, (partial) => {
-            setStreams((s) => ({ ...s, [m.id]: partial }));
-          }),
+          streamMockResponse(
+            m.id,
+            p,
+            (partial) => {
+              setStreams((s) => ({ ...s, [m.id]: partial }));
+            },
+            controller,
+          ),
         ),
       );
       setResults(all);
@@ -46,10 +60,29 @@ export function ChatWorkspace({ initialPrompt }: { initialPrompt?: string }) {
         responses: all,
         merged: mergedText || undefined,
       });
+
+      setShareData({ prompt: p, responses: all, merged: mergedText || undefined });
     } catch {
       toast.error("Something went wrong. Try again.");
     } finally {
       setBusy(false);
+      setPaused(false);
+      controllerRef.current = null;
+    }
+  }
+
+  // Toggles between pausing the in-flight streams and resuming them
+  // exactly where they left off.
+  function toggleStop() {
+    const controller = controllerRef.current;
+    if (!controller) return;
+
+    if (paused) {
+      controller.resume();
+      setPaused(false);
+    } else {
+      controller.pause();
+      setPaused(true);
     }
   }
 
@@ -103,7 +136,11 @@ export function ChatWorkspace({ initialPrompt }: { initialPrompt?: string }) {
               <div className="glass flex items-center justify-between rounded-2xl p-4 text-sm mt-5">
                 <span className="text-muted-foreground">Want a single, synthesized answer combining the best of all three?</span>
                 <button
-                  onClick={() => setMerged(buildMergedAnswer(prompt, results))}
+                  onClick={() => {
+                    const mergedText = buildMergedAnswer(prompt, results);
+                    setMerged(mergedText);
+                    setShareData({ prompt, responses: results, merged: mergedText });
+                  }}
                   className="rounded-lg [background:var(--gradient-primary)] px-4 py-2 text-sm font-medium text-white shadow-md transition-transform hover:-translate-y-0.5"
                 >
                   Generate Merged Answer
@@ -119,7 +156,7 @@ export function ChatWorkspace({ initialPrompt }: { initialPrompt?: string }) {
       </div>
 
       {/* Prompt bar always at bottom */}
-      <PromptInput busy={busy} onSubmit={run} />
+      <PromptInput busy={busy} paused={paused} onSubmit={run} onToggleStop={toggleStop} />
 
     </div>
   );

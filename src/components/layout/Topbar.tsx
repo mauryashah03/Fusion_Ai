@@ -2,7 +2,15 @@ import { useAuth } from "@/lib/auth-store";
 import { useTheme } from "@/lib/theme-store";
 import { Moon, Sun } from "lucide-react";
 
-export function Topbar({ title, subtitle }: { title: string; subtitle?: string }) {
+export function Topbar({
+  title,
+  subtitle,
+  actions,
+}: {
+  title: string;
+  subtitle?: string;
+  actions?: React.ReactNode;
+}) {
   const user = useAuth((s) => s.user);
   const { theme, toggleTheme } = useTheme();
 
@@ -15,7 +23,8 @@ export function Topbar({ title, subtitle }: { title: string; subtitle?: string }
       </div>
 
       <div className="flex items-center gap-2.5">
-        {/* Theme toggle — CSS vars adapt to both light and dark */}
+        {actions}
+
         <button
           onClick={toggleTheme}
           title={theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode"}
@@ -26,24 +35,16 @@ export function Topbar({ title, subtitle }: { title: string; subtitle?: string }
             color: "var(--muted-foreground)",
           }}
         >
-          {theme === "dark" ? (
-            <Sun className="h-4 w-4" />
-          ) : (
-            <Moon className="h-4 w-4" />
-          )}
+          {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
         </button>
 
-        {/* User info */}
         <div className="hidden text-right md:block">
           <div className="text-xs font-medium">{user?.name}</div>
           <div className="text-[10px] text-muted-foreground">{user?.email}</div>
         </div>
         <div
           className="grid h-8 w-8 place-items-center rounded-full text-xs font-semibold shadow-md"
-          style={{
-            background: "var(--gradient-primary)",
-            color: "var(--primary-foreground)",
-          }}
+          style={{ background: "var(--gradient-primary)", color: "var(--primary-foreground)" }}
         >
           {user?.name?.[0]?.toUpperCase() ?? "U"}
         </div>

@@ -107,7 +107,7 @@ function AuthPage() {
             <span className="gradient-text"> Run them all at once.</span>
           </h2>
           <p className="mt-4 max-w-md text-muted-foreground">
-            Veriq AI sends every prompt to GPT, Claude, and Gemini in parallel — then
+            Veriq AI sends every prompt to Gpt, Gemini, and Llama3 in parallel — then
             scores, ranks, and merges the answers so you don't have to.
           </p>
         </div>

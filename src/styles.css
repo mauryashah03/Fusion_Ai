@@ -48,9 +48,9 @@
   --color-violet: var(--violet);
   --color-indigo: var(--indigo);
   --color-cyan: var(--cyan);
-  --color-gpt: var(--gpt);
-  --color-claude: var(--claude);
-  --color-gemini: var(--gemini);
+  --color-Gpt: var(--Gpt);
+  --color-Gemini: var(--Gemini);
+  --color-Llama3: var(--Llama3);
 
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Poppins", "Inter", ui-sans-serif, system-ui, sans-serif;
@@ -119,9 +119,9 @@
   --indigo: #1F8A63;
   --cyan: #52D4A4;
 
-  --gpt: #10A37F;
-  --claude: #C87A32;
-  --gemini: #4AA3FF;
+  --Gpt: #10A37F;
+  --Gemini: #C87A32;
+  --Llama3: #4AA3FF;
 
   /* Gradients */
 

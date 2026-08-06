@@ -5,16 +5,20 @@ import { ModelAvatar } from "@/components/chat/ModelAvatar";
 
 const SAMPLE_PROMPT = "How can AI improve healthcare?";
 
+function buildEmptyTexts(): Record<ModelId, string> {
+  return ACTIVE_MODELS.reduce((acc, m) => {
+    acc[m.id] = "";
+    return acc;
+  }, {} as Record<ModelId, string>);
+}
+
 export function HeroDemo() {
-  const [texts, setTexts] = useState<Record<ModelId, string>>({
-    gpt: "", claude: "", gemini: "",
-    deepseek: "", grok: "", mistral: "", llama: "", perplexity: "",
-  });
+  const [texts, setTexts] = useState<Record<ModelId, string>>(buildEmptyTexts());
   const [key, setKey] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
-    setTexts({ gpt: "", claude: "", gemini: "", deepseek: "", grok: "", mistral: "", llama: "", perplexity: "" });
+    setTexts(buildEmptyTexts());
 
     ACTIVE_MODELS.forEach((m) => {
       streamMockResponse(m.id, SAMPLE_PROMPT, (partial) => {

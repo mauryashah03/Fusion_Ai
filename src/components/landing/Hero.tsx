@@ -39,7 +39,7 @@ export function Hero() {
           transition={{ duration: 0.6, delay: 0.15 }}
           className="mx-auto mt-6 max-w-2xl text-base text-muted-foreground md:text-lg"
         >
-          Compare GPT, Claude, and Gemini instantly — and receive the smartest
+          Compare Gpt, Gemini, and Llama3 instantly — and receive the smartest
           combined answer, scored and synthesized in real time.
         </motion.p>
 

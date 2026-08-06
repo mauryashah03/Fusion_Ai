@@ -1,13 +1,25 @@
 import { type ModelId } from "@/lib/ai-models";
 
 const LABELS: Record<ModelId, string> = {
-  gpt: "G", claude: "C", gemini: "✦",
-  deepseek: "D", grok: "X", mistral: "M", llama: "L", perplexity: "P",
+  "Gpt": "G",
+  Gemini: "C",
+  "Llama3": "✦",
+  deepseek: "D",
+  grok: "X",
+  mistral: "M",
+  "Veriq Logic": "L",
+  perplexity: "P",
 };
+
 const COLORS: Record<ModelId, string> = {
-  gpt: "var(--gpt)", claude: "var(--claude)", gemini: "var(--gemini)",
-  deepseek: "var(--cyan)", grok: "var(--violet)", mistral: "var(--indigo)",
-  llama: "var(--accent)", perplexity: "var(--gemini)",
+  "Gpt": "var(--veriq-think)",
+  Gemini: "var(--Gemini)",
+  "Llama3": "var(--veriq-vision)",
+  deepseek: "var(--cyan)",
+  grok: "var(--violet)",
+  mistral: "var(--indigo)",
+  "Veriq Logic": "var(--accent)",
+  perplexity: "var(--veriq-vision)",
 };
 
 export function ModelAvatar({ id, size = 32 }: { id: ModelId; size?: number }) {

@@ -1,5 +1,5 @@
 // Model abstraction layer — easy to swap mock for real APIs later.
-export type ModelId = "gpt" | "claude" | "gemini" | "deepseek" | "grok" | "mistral" | "llama" | "perplexity";
+export type ModelId = "gpt" | "Gemini" | "gemini" | "deepseek" | "grok" | "mistral" | "llama" | "perplexity";
 
 export type ModelDef = {
   id: ModelId;
@@ -11,13 +11,13 @@ export type ModelDef = {
 };
 
 export const MODELS: ModelDef[] = [
-  { id: "gpt", name: "GPT-4o", provider: "OpenAI", color: "var(--gpt)", enabled: true },
-  { id: "claude", name: "Claude Sonnet", provider: "Anthropic", color: "var(--claude)", enabled: true },
-  { id: "gemini", name: "Gemini Pro", provider: "Google", color: "var(--gemini)", enabled: true },
+  { id: "gpt", name: "Gpt", provider: "OpenAI", color: "var(--gpt)", enabled: true },
+  { id: "Gemini", name: "Gemini Sonnet", provider: "Anthropic", color: "var(--Gemini)", enabled: true },
+  { id: "gemini", name: "Gemini", provider: "Google", color: "var(--gemini)", enabled: true },
   { id: "deepseek", name: "DeepSeek", provider: "DeepSeek", color: "var(--cyan)", enabled: false, comingSoon: true },
   { id: "grok", name: "Grok", provider: "xAI", color: "var(--violet)", enabled: false, comingSoon: true },
   { id: "mistral", name: "Mistral", provider: "Mistral AI", color: "var(--indigo)", enabled: false, comingSoon: true },
-  { id: "llama", name: "Llama 3", provider: "Meta", color: "var(--accent)", enabled: false, comingSoon: true },
+  { id: "llama", name: "Llama3", provider: "Meta", color: "var(--accent)", enabled: false, comingSoon: true },
   { id: "perplexity", name: "Perplexity", provider: "Perplexity", color: "var(--gemini)", enabled: false, comingSoon: true },
 ];
 
@@ -44,7 +44,7 @@ export type ModelResponse = {
 const RESPONSE_TEMPLATES: Record<ModelId, (prompt: string) => string> = {
   gpt: (p) =>
     `Here's a structured take on **"${p.slice(0, 80)}"**:\n\n1. **Context** — Modern AI systems can transform this domain by augmenting human judgment with data-driven insight.\n2. **Mechanisms** — Pattern recognition across vast corpora, low-latency reasoning, and adaptive personalization.\n3. **Risks** — Bias propagation, hallucination, and accountability gaps require continuous evaluation.\n4. **Outlook** — A pragmatic 12–24 month horizon favors hybrid workflows: AI proposes, humans dispose.\n\nIn short: think of AI as a force multiplier rather than a replacement.`,
-  claude: (p) =>
+  Gemini: (p) =>
     `Let me think through "${p.slice(0, 80)}" carefully.\n\nThere are really three lenses worth considering — the *empirical* (what evidence shows today), the *systemic* (how organizations would actually adopt it), and the *ethical* (who benefits, who is harmed).\n\nThe most underrated point is that quality of deployment matters more than capability of the model. A modestly intelligent system thoughtfully integrated into a workflow outperforms a frontier model bolted on as an afterthought.\n\nMy concrete recommendation: start with one high-value, low-risk workflow, measure rigorously, and expand only where outcomes clearly improve.`,
   gemini: (p) =>
     `Quick synthesis on "${p.slice(0, 80)}":\n\n• **Today** — practical wins in summarization, retrieval, and triage.\n• **Soon** — agentic workflows that chain tools and verify their own output.\n• **Limits** — context drift, evaluation gaps, and unclear regulation.\n\n**Bottom line:** the highest leverage right now is *workflow redesign*, not model selection. The teams winning aren't using the smartest model — they're using the model most thoughtfully.`,
@@ -63,7 +63,7 @@ function buildMetrics(modelId: ModelId) {
   // Bias each model a little so scores feel believable.
   const base = {
     gpt:     { accuracy: 94, completeness: 92, creativity: 87, technical: 95, reasoning: 93, clarity: 95 },
-    claude:  { accuracy: 91, completeness: 95, creativity: 93, technical: 88, reasoning: 96, clarity: 94 },
+    Gemini:  { accuracy: 91, completeness: 95, creativity: 93, technical: 88, reasoning: 96, clarity: 94 },
     gemini:  { accuracy: 89, completeness: 88, creativity: 90, technical: 92, reasoning: 87, clarity: 91 },
   } as Record<string, ModelResponse["metrics"]>;
   const b = base[modelId] ?? base.gpt;
@@ -85,13 +85,37 @@ export function finalScore(m: ModelResponse["metrics"]) {
 }
 
 /**
+ * Lightweight pause/resume controller shared across all model streams
+ * for a single "run". Calling pause() freezes every stream in place;
+ * resume() continues each one exactly where it left off.
+ */
+export class StreamController {
+  private paused = false;
+
+  pause() {
+    this.paused = true;
+  }
+
+  resume() {
+    this.paused = false;
+  }
+
+  isPaused() {
+    return this.paused;
+  }
+}
+
+/**
  * Streams a mocked response token-by-token via the provided callback.
- * Returns a promise that resolves with the final response object.
+ * Returns a promise that resolves with the final response object once
+ * all tokens have been emitted. Pass a StreamController to allow
+ * pausing/resuming the stream mid-way — progress is never lost.
  */
 export function streamMockResponse(
   modelId: ModelId,
   prompt: string,
   onChunk: (partial: string) => void,
+  controller?: StreamController,
 ): Promise<ModelResponse> {
   return new Promise((resolve) => {
     const fullText = RESPONSE_TEMPLATES[modelId](prompt);
@@ -103,6 +127,10 @@ export function streamMockResponse(
     const start = Date.now();
 
     const interval = setInterval(() => {
+      // Frozen while paused — do nothing this tick, resumes automatically
+      // once the controller is unpaused.
+      if (controller?.isPaused()) return;
+
       if (i >= tokens.length) {
         clearInterval(interval);
         const metrics = buildMetrics(modelId);

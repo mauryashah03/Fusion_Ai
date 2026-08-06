@@ -2,12 +2,12 @@ import { motion } from "framer-motion";
 import { Layers, Gauge, Sparkles, Briefcase, Shield, Zap } from "lucide-react";
 
 const features = [
-  { icon: Layers, title: "Multi-AI Comparison", desc: "Ask once, get answers from GPT, Claude, and Gemini side-by-side in real time." },
+  { icon: Layers, title: "Multi-AI Comparison", desc: "Ask once, get answers from Gpt, Gemini, and Llama3 side-by-side in real time." },
   { icon: Gauge, title: "Accuracy Scoring", desc: "Every response is evaluated across six dimensions — accuracy, reasoning, clarity, and more." },
   { icon: Sparkles, title: "Merged Intelligence", desc: "We synthesize the best facts, reasoning, and structure into one unified answer." },
   { icon: Briefcase, title: "Research Workspace", desc: "Built for developers, researchers, enterprises, and government teams." },
   { icon: Shield, title: "Enterprise Security", desc: "Government-grade encryption, SSO, audit logs, and data residency controls." },
-  { icon: Zap, title: "Future-Ready", desc: "DeepSeek, Grok, Mistral, Llama, Perplexity, and custom models — one prompt away." },
+  { icon: Zap, title: "Future-Ready", desc: "DeepSeek, Grok, Mistral, Veriq Logic, Perplexity, and custom models — one prompt away." },
 ];
 
 export function Features() {

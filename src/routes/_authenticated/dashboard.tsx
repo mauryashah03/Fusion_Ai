@@ -104,7 +104,7 @@ function Dashboard() {
 </motion.div>
 
 <p className="mt-1 text-sm text-muted-foreground">
-  Ask once. Watch GPT, Claude, and Gemini answer in parallel.
+  Ask once. Watch Gpt, Gemini, and Llama3 answer in parallel.
 </p>
             </div>
             <div className="flex gap-2">
