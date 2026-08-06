@@ -1,3 +1,9 @@
+# Environment variables - NEVER commit these
+.env
+.env.local
+.env.*
+backend/.env
+
 # Logs
 logs
 *.log
@@ -35,3 +41,9 @@ dist-ssr
 app.config.timestamp_*
 *.timestamp_*
 
+# Python
+backend/.venv/
+backend/venv/
+backend/__pycache__/
+*.pyc
+__pycache__/

@@ -1,3 +1,4 @@
+@import 'katex/dist/katex.min.css';
 @import "tailwindcss" source(none);
 @import "tw-animate-css";
 @source "../src";
@@ -55,6 +56,11 @@
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Poppins", "Inter", ui-sans-serif, system-ui, sans-serif;
 }
+
+/* ====================================================
+   DEFAULT — Dark (charcoal) on first load
+   theme-store.ts overrides these via setProperty()
+==================================================== */
 
 :root {
   --radius: 0.75rem;
